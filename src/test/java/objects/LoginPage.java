@@ -8,19 +8,19 @@ import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
 public class LoginPage {
 
-    public LoginPage(WebDriver driver){
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 90), this);
+    public LoginPage(WebDriver driver) {
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 30), this);
     }
 
-    @FindBy(xpath = "//input[@name='uid']")
-    public WebElement txtUserID;
+    @FindBy(id = "loginEmail")
+    public WebElement txtEmail;
 
-    @FindBy(xpath = "//input[@name='password']")
+    @FindBy(xpath = "//input[@value='login']/..//input[@id='password']")
     public WebElement txtPass;
 
-    @FindBy(name = "btnLogin")
+    @FindBy(xpath = "//button[@id='submit' and text()='Login']")
     public WebElement btnLogin;
 
-    @FindBy(xpath = "//*[@class='layout']//tr[@class='heading3']")
-    public WebElement lblUserID;
+    @FindBy(css = ".alert-danger > strong")
+    public WebElement lblErrorMsg;
 }

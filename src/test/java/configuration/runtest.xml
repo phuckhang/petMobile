@@ -2,10 +2,15 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Demo Selenium">
     <parameter name="browserName" value="chrome"/>
-    <parameter name="urlPath" value="/V4/"/>
+    <parameter name="urlPath" value="/create_account"/>
     <test name="Login guru">
         <classes>
-            <class name="modules.LoginTest"/>
+            <class name="modules.LoginTest">
+                <methods>
+                    <include name="test_login_success"/>
+                    <include name="test_login_failed"/>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

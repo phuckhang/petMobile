@@ -8,13 +8,10 @@ import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
 public class HomePage {
 
-    public HomePage(WebDriver driver){
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 90), this);
+    public HomePage(WebDriver driver) {
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 30), this);
     }
 
-    @FindBy(xpath = "//*[@class='layout']//tr[@class='heading3']")
-    public WebElement lblUserID;
-
-    @FindBy(xpath = "//*[@href='Logout.php']")
+    @FindBy(xpath = "//*[@href='/logout']")
     public WebElement btnLogout;
 }

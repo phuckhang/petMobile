@@ -9,20 +9,19 @@ public class LoginFunc extends LoginPage {
         super(driver);
     }
 
-    public void fillUserID(String userID){
-        txtUserID.sendKeys(userID);
+    public void fillEmail(String email) {
+        txtEmail.sendKeys(email);
     }
 
-    public void fillPassword(String pass){
+    public void fillPassword(String pass) {
         txtPass.sendKeys(pass);
     }
 
-    public void clickLoginButton(){
+    public void clickLoginButton() {
         btnLogin.click();
     }
 
-    public void verifyLogin(String expectUserID){
-//        Assert.assertEquals(lblUserID.getText(), expectUserID);
-        Assert.assertTrue(lblUserID.getText().contains(expectUserID));
+    public void verifyErrorMessage(String expectMessage) {
+        Assert.assertEquals(lblErrorMsg.getText(), expectMessage);
     }
 }

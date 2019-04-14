@@ -1,29 +1,32 @@
 package configuration;
 
-import com.beust.jcommander.Parameter;
-import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
+import com.aventstack.extentreports.*;
+import com.aventstack.extentreports.markuputils.ExtentColor;
+import com.aventstack.extentreports.markuputils.MarkupHelper;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
+import data.TestData;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import supports.CommonFunctions;
+import supports.GetScreenShot;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
-public class TestBase {
+public class TestBase extends TestData {
     public static WebDriver driver;
-    public static String BASE_URL="http://demo.guru99.com";
+    public static String BASE_URL = "https://anotepad.com";
+    private ExtentHtmlReporter htmlReporter;
+    public ExtentReports extent;
+    public ExtentTest logger;
 
     @Parameters({"browserName"})
     @BeforeTest
-    public static void init(@Optional("chrome") String browserName) {
+    public void init(@Optional("firefox") String browserName) {
         driver = CommonFunctions.getBrowser(browserName);
-//        driver.manage().window().maximize();
-//        driver.get(BASE_URL + "/V4/");
     }
 
     @Parameters({"urlPath"})
@@ -32,30 +35,52 @@ public class TestBase {
         CommonFunctions.visit(urlPath);
     }
 
-    @DataProvider(name = "guru")
-    public Object[][] testData() {
-        return new Object[][]{
-                new Object[]{"mngr189462", "jemebEb"}
-        };
+    @BeforeTest
+    public void startReport() {
+        htmlReporter = new ExtentHtmlReporter(System.getProperty("user.dir") + "/src/test/java/reports/ExtentReport.html");
+        extent = new ExtentReports();
+        extent.attachReporter(htmlReporter);
+        extent.setSystemInfo("Host Name", "ReportTest");
+        extent.setSystemInfo("Environment", "Test");
+        extent.setSystemInfo("User name", "Khang");
+        htmlReporter.config().setDocumentTitle("ExtentReport");
+        htmlReporter.config().setReportName("Auto Test Report");
+        htmlReporter.config().setTheme(Theme.STANDARD);
+    }
+
+    @Test
+    public void captureScreenshot() {
+        logger = extent.createTest("captureScreenshot");
+        System.setProperty("webdriver.gecko.driver", "./Drivers/geckodriver.exe");
+        driver = new FirefoxDriver();
+        driver.get("http://www.automationtesting.in");
+        String title = driver.getTitle();
+        Assert.assertEquals("Home - Automation Test", title);
     }
 
     @AfterMethod
-    public void takeScreenShotIfFailure(ITestResult testResult) throws IOException {
-        String screenShotFile;
-        String tc_name = testResult.getMethod().getConstructorOrMethod().getName();
-        String dateFormat = new SimpleDateFormat("ddMMyyyy_hhmmss").format(Calendar.getInstance().getTime());
-        //Create the file name with date time format then grant to "screenShotFile"
-        screenShotFile = System.getProperty("user.dir") + "/src/test/java/reports/images/" + "ScreenShot_" + tc_name + "_" + dateFormat + ".png";
-
-        if (testResult.getStatus() == ITestResult.FAILURE) {
-            File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            FileUtils.copyFile(scrFile, new File(screenShotFile));
-
+    public void getResult(ITestResult result) throws IOException {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            logger.log(Status.FAIL, "Failed test case is " + result.getName());
+            logger.log(Status.FAIL, "Test case is failed because: " + result.getThrowable());
+            String screenShotPath = GetScreenShot.capture(driver, result.getName());
+            MediaEntityModelProvider mediaModel = MediaEntityBuilder.createScreenCaptureFromBase64String(screenShotPath).build();
+            logger.fail("Click on base64-image to open screenshot ==>> ", mediaModel);
+////            Chrome and Firefox are not allowed to load local resource (screenshot). So using FromBase64 instead of FromPath
+//            logger.fail("Snapshot below: " + logger.addScreenCaptureFromPath(screenShotPath));
+        } else if (result.getStatus() == ITestResult.SKIP) {
+            logger.log(Status.FAIL, "Skipped test case is " + result.getName());
         }
+        extent.flush();
     }
 
     @AfterTest
     public void tearDown() {
         driver.quit();
     }
+
+    public void logPassed(String description) {
+        logger.log(Status.PASS, MarkupHelper.createLabel(description, ExtentColor.GREEN));
+    }
+
 }

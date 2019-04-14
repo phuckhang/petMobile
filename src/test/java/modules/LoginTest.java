@@ -6,14 +6,35 @@ import libraries.LoginFunc;
 import org.testng.annotations.Test;
 
 public class LoginTest extends TestBase {
-    @Test(dataProvider = "guru")
-    public void login_test(String userID, String pass){
+
+    @Test(dataProvider = "loginSuccess")
+    public void test_login_success(String email, String pass) {
+        logger = extent.createTest("test_login_passed");
         LoginFunc lf = new LoginFunc(driver);
         HomeFunc hf = new HomeFunc(driver);
-        lf.fillUserID(userID);
+        lf.fillEmail(email);
+        logPassed("Fill user ID");
         lf.fillPassword(pass);
+        logPassed("Fill password");
         lf.clickLoginButton();
-        hf.verifyLoginSuccessful(userID);
-        hf.clickLoginButton();
+        logPassed("Click on Login button");
+        hf.verifyLoginSuccessful();
+        logPassed("Login successfully");
+        hf.clickLogoutButton();
     }
+
+    @Test(dataProvider = "loginFailed")
+    public void test_login_failed(String email, String pass, String message) {
+        logger = extent.createTest("test_login_failed");
+        LoginFunc lf = new LoginFunc(driver);
+        lf.fillEmail(email);
+        logPassed("Fill user ID");
+        lf.fillPassword(pass);
+        logPassed("Fill password");
+        lf.clickLoginButton();
+        logPassed("Click on Login button");
+        lf.verifyErrorMessage(message);
+        logPassed("Error message is correct");
+    }
+
 }
