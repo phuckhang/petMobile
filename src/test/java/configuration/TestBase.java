@@ -7,8 +7,6 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import data.TestData;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import supports.CommonFunctions;
@@ -25,8 +23,8 @@ public class TestBase extends TestData {
 
     @Parameters({"browserName"})
     @BeforeTest
-    public void init(@Optional("firefox") String browserName) {
-        driver = CommonFunctions.getBrowser(browserName);
+    public void init() {
+        driver = CommonFunctions.getBrowser(System.getProperty("browser.name"));
     }
 
     @Parameters({"urlPath"})
@@ -48,26 +46,13 @@ public class TestBase extends TestData {
         htmlReporter.config().setTheme(Theme.STANDARD);
     }
 
-    @Test
-    public void captureScreenshot() {
-        logger = extent.createTest("captureScreenshot");
-        System.setProperty("webdriver.gecko.driver", "./Drivers/geckodriver.exe");
-        driver = new FirefoxDriver();
-        driver.get("http://www.automationtesting.in");
-        String title = driver.getTitle();
-        Assert.assertEquals("Home - Automation Test", title);
-    }
-
     @AfterMethod
     public void getResult(ITestResult result) throws IOException {
         if (result.getStatus() == ITestResult.FAILURE) {
-            logger.log(Status.FAIL, "Failed test case is " + result.getName());
+            logger.log(Status.FAIL, MarkupHelper.createLabel("Failed test case is " + result.getName(), ExtentColor.RED));
             logger.log(Status.FAIL, "Test case is failed because: " + result.getThrowable());
             String screenShotPath = GetScreenShot.capture(driver, result.getName());
-            MediaEntityModelProvider mediaModel = MediaEntityBuilder.createScreenCaptureFromBase64String(screenShotPath).build();
-            logger.fail("Click on base64-image to open screenshot ==>> ", mediaModel);
-////            Chrome and Firefox are not allowed to load local resource (screenshot). So using FromBase64 instead of FromPath
-//            logger.fail("Snapshot below: " + logger.addScreenCaptureFromPath(screenShotPath));
+            logger.fail("Screenshot is below: " + logger.addScreenCaptureFromPath(screenShotPath));
         } else if (result.getStatus() == ITestResult.SKIP) {
             logger.log(Status.FAIL, "Skipped test case is " + result.getName());
         }

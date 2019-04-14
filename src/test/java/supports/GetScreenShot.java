@@ -15,13 +15,12 @@ public class GetScreenShot {
     public static String capture(WebDriver driver, String screenShotName) throws IOException {
 
         String dateFormat = new SimpleDateFormat("ddMMyyyy_hhmmss").format(Calendar.getInstance().getTime());
-        TakesScreenshot ts = (TakesScreenshot) driver;
-        String strBase64 = ts.getScreenshotAs(OutputType.BASE64);
-        File source = ts.getScreenshotAs(OutputType.FILE);
         String dest = System.getProperty("user.dir") + "/src/test/java/reports/images/" + screenShotName + "_" + dateFormat + ".png";
+        TakesScreenshot ts = (TakesScreenshot) driver;
+        File source = ts.getScreenshotAs(OutputType.FILE);
         File destination = new File(dest);
         FileUtils.copyFile(source, destination);
-//        return dest; //Using when it isn't local resource
-        return strBase64;
+
+        return dest;
     }
 }

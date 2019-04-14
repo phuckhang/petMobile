@@ -19,7 +19,7 @@ public class CommonFunctions extends TestBase {
         } else if (browser.equalsIgnoreCase("firefox")) {
             System.setProperty("webdriver.gecko.driver", "./Drivers/geckodriver.exe");
             return new FirefoxDriver();
-        } else System.err.println("The browser " + browser + " is no defined!!");
+        } else System.err.println("The browser '" + browser + "' is not defined!!");
         return null;
     }
 

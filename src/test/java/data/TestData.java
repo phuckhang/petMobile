@@ -16,7 +16,7 @@ public class TestData {
     public Object[][] loginFailed() {
         return new Object[][]{
                 {"test@gmail.com", "123", "Email and password do not match"},
-                {" ", " ", "Email and password are required"},
+                {"", "", "Email and password are required"},
                 {"a@gmail.com", " ", "Email and password do not match"}};
     }
 

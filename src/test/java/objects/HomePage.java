@@ -9,7 +9,7 @@ import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 public class HomePage {
 
     public HomePage(WebDriver driver) {
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 30), this);
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 20), this);
     }
 
     @FindBy(xpath = "//*[@href='/logout']")
