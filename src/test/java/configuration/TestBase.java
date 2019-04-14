@@ -23,8 +23,14 @@ public class TestBase extends TestData {
 
     @Parameters({"browserName"})
     @BeforeTest
-    public void init() {
-        driver = CommonFunctions.getBrowser(System.getProperty("browser.name"));
+    public void init(String browserName) {
+        String name = System.getProperty("browser.name");
+        if (name == null) {
+            driver = CommonFunctions.getBrowser(browserName);
+        } else {
+            driver = CommonFunctions.getBrowser(name);
+        }
+
     }
 
     @Parameters({"urlPath"})
