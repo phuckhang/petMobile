@@ -13,9 +13,9 @@ public class LoginTest extends TestBase {
         LoginFunc lf = new LoginFunc(driver);
         HomeFunc hf = new HomeFunc(driver);
         lf.fillEmail(email);
-        logPassed("Fill user ID");
+        logPassed("Fill email: " + email);
         lf.fillPassword(pass);
-        logPassed("Fill password");
+        logPassed("Fill password: " + pass);
         lf.clickLoginButton();
         logPassed("Click on Login button");
         hf.verifyLoginSuccessful();
@@ -28,9 +28,9 @@ public class LoginTest extends TestBase {
         logger = extent.createTest("test_login_failed");
         LoginFunc lf = new LoginFunc(driver);
         lf.fillEmail(email);
-        logPassed("Fill user ID");
+        logPassed("Fill email: " + email);
         lf.fillPassword(pass);
-        logPassed("Fill password");
+        logPassed("Fill password: " + pass);
         lf.clickLoginButton();
         logPassed("Click on Login button");
         lf.verifyErrorMessage(message);

@@ -1,3 +1,19 @@
-Command line to run tests on relevant browsers
-1. On chrome: mvn -Dbrowser.name=chrome clean test
-2. On firefox: mvn -Dbrowser.name=firefox clean test
+Hello, this is a test project which is made by Phuc Khang.
+
+1. In order to run the script, make sure the environments below are available:
+- Install Java
+- Install Maven
+Refer: https://www.mkyong.com/maven/how-to-install-maven-in-windows/
+
+2. Run automation test:
+- Go to project's root folder which contains source code
+	* Use following command line to run:
+	    + By default, running by chrome: mvn clean test
+        + Run on firefox: mvn -Dbrowser.name=firefox clean test
+
+3. To see a report after running test:
+- The test report is in following folder: ./src/test/java/reports
+	+ Open ExtentReport.html to see the report.
+
+
+

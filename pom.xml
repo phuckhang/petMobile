@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <browser.name>chrome</browser.name>
+        <browser.name>{browser.name}</browser.name>
     </properties>
 
     <build>

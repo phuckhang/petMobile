@@ -8,7 +8,7 @@ public class TestData {
     public Object[][] loginSuccess() {
         return new Object[][]{
                 {"khang@gmail.com", "123456"},
-                {"khang@gmail.com", "123"}
+                {"phuc@gmail.com", "123"}
         };
     }
 
